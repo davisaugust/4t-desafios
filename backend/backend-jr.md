@@ -4,7 +4,7 @@
 
 Construir uma **API REST** para gerenciar **beneficiários** de um plano de saúde. O sistema deve permitir **CRUD**, aplicar **regras de negócio básicas**, persistir os dados em **banco relacional**, possuir **testes de unidade** e **documentação** (Swagger/OpenAPI).
 
-> ** Liberdade Tecnológica**: Este desafio é **completamente agnóstico** de linguagem e framework. Você tem **total liberdade** para escolher qualquer stack tecnológico com o qual se sinta mais confortável e produtivo.
+> Liberdade Tecnológica: Este desafio é **completamente agnóstico** de linguagem e framework. Você tem **total liberdade** para escolher qualquer stack tecnológico com o qual se sinta mais confortável e produtivo.
 
 ---
 
