@@ -41,31 +41,22 @@ public class PlanoController {
 
     @PostMapping
     public ResponseEntity save(@RequestBody PlanoDto dto){
-        try{
-            Plano saved = planoService.save(dto);
-            return ResponseEntity.status(HttpStatus.CREATED).body(saved);
-        }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Post não funcionou.");
-        }
+        Plano planoSalvo = planoService.save(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(planoSalvo);
+        
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable UUID id){
-        try{
-            planoService.delete(id);
-            return ResponseEntity.status(HttpStatus.OK).body("Beneficiario deletado");
-        }catch(RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Beneficiario não encontrado");
-        }
+        planoService.delete(id);
+        return ResponseEntity.status(HttpStatus.OK).body("Plano deletado");
+        
     }
 
     @PutMapping("/{id}")
     public ResponseEntity update(@PathVariable UUID id, @RequestBody PlanoDto dto) {
-        try {
-            Plano updated = planoService.update(id, dto);   
-            return ResponseEntity.status(HttpStatus.OK).body(updated);
-        }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Não deu pra atualizar");
-        }
+        Plano updated = planoService.update(id, dto);   
+        return ResponseEntity.status(HttpStatus.OK).body(updated);
+        
     }
 }

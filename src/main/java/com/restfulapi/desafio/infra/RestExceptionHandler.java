@@ -11,7 +11,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.restfulapi.desafio.exceptions.CpfConflict;
+import com.restfulapi.desafio.exceptions.CpfInvalid;
 import com.restfulapi.desafio.exceptions.ErrorResponse;
+import com.restfulapi.desafio.exceptions.PlanoInvalid;
 import com.restfulapi.desafio.exceptions.PlanoNotFound;
 
 import org.springframework.http.HttpStatus;
@@ -33,6 +36,36 @@ public class RestExceptionHandler {
                 Collections.singletonList(new ErrorResponse.ErrorDetail("plano_id", "invalid"))
         );
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler(CpfConflict.class)
+    public ResponseEntity<ErrorResponse> cpfConflict(CpfConflict exception){
+        ErrorResponse error = new ErrorResponse(
+            "Conflict",
+            exception.getMessage(),
+            Collections.singletonList(new ErrorResponse.ErrorDetail("cpf", "invalid"))
+        );
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
+    @ExceptionHandler(CpfInvalid.class)
+    public ResponseEntity<ErrorResponse> cpfInvalid(CpfInvalid exception){
+        ErrorResponse error = new ErrorResponse(
+            "Conflict",
+            exception.getMessage(),
+            Collections.singletonList(new ErrorResponse.ErrorDetail("cpf", "invalid"))
+        );
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
+    @ExceptionHandler(PlanoInvalid.class)
+    public ResponseEntity<ErrorResponse> PlanoInvalid(PlanoInvalid exception){
+        ErrorResponse error = new ErrorResponse(
+            "Internal Server Error",
+            exception.getMessage(),
+            Collections.singletonList(new ErrorResponse.ErrorDetail("cpf", "invalid"))
+        );
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)

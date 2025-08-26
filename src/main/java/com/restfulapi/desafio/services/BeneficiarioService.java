@@ -11,6 +11,11 @@ import com.restfulapi.desafio.model.Plano;
 import com.restfulapi.desafio.repositories.BeneficiarioRepository;
 import com.restfulapi.desafio.repositories.PlanoRepository;
 import com.restfulapi.desafio.dtos.BeneficiarioDto;
+import com.restfulapi.desafio.exceptions.BeneficiarioNotFound;
+import com.restfulapi.desafio.exceptions.CpfConflict;
+import com.restfulapi.desafio.exceptions.CpfInvalid;
+import com.restfulapi.desafio.exceptions.PlanoInvalid;
+import com.restfulapi.desafio.exceptions.PlanoNotFound;
 
 @Service
 public class BeneficiarioService {
@@ -25,39 +30,42 @@ public class BeneficiarioService {
         return beneficiarioRepository.findAll();
     }
 
-    public Optional<Beneficiario> getById(UUID id){
-        return beneficiarioRepository.findById(id);
+    public Beneficiario getById(UUID id){
+        return beneficiarioRepository.findById(id).orElseThrow(()-> new BeneficiarioNotFound());
     }
 
     public Beneficiario save(BeneficiarioDto dto) {
-    var beneficiario = new Beneficiario();
+        var beneficiario = new Beneficiario();
+        String cpf = dto.cpf();
 
-    BeanUtils.copyProperties(dto, beneficiario, "plano");
+        BeanUtils.copyProperties(dto, beneficiario, "plano");
 
-    if (dto.status() != null) {
-        beneficiario.setStatus(dto.status());
+        if (dto.status() != null) {
+            beneficiario.setStatus(dto.status());
+        }
+
+        if (dto.data_cadastro() != null) {
+            beneficiario.setData_cadastro(dto.data_cadastro());
+        }
+    
+        if(beneficiarioRepository.existsByCpf(dto.cpf())){
+            throw new CpfConflict();
+        }else if(cpf.length() != 11 ){
+            throw new CpfInvalid();
+        }
+
+        Plano plano = planoRepository.findById(dto.plano_id())
+                .orElseThrow(() -> new PlanoNotFound());
+
+        beneficiario.setPlano(plano);
+        
+
+        return beneficiarioRepository.save(beneficiario);
     }
-
-    if (dto.data_cadastro() != null) {
-        beneficiario.setData_cadastro(dto.data_cadastro());
-    }
-
-    // Beneficiario existente = beneficiarioRepository.findByCpf(dto.cpf());
-    // if (existente != null) {
-    //     throw new RuntimeException("CPF duplicado");
-    // }
-
-    Plano plano = planoRepository.findById(dto.plano_id())
-            .orElseThrow(() -> new RuntimeException("Plano não encontrado"));
-
-    beneficiario.setPlano(plano);
-
-    return beneficiarioRepository.save(beneficiario);
-}
 
 
     public void delete(UUID id){
-        Beneficiario beneficiario = beneficiarioRepository.findById(id).orElseThrow(() -> new RuntimeException("f"));
+        Beneficiario beneficiario = beneficiarioRepository.findById(id).orElseThrow(() -> new BeneficiarioNotFound());
         beneficiarioRepository.delete(beneficiario);
     }
 

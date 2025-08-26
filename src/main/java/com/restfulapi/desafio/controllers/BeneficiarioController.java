@@ -2,6 +2,7 @@ package com.restfulapi.desafio.controllers;
 
 import java.util.UUID;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,28 +32,21 @@ public class BeneficiarioController {
     }
 
     @GetMapping("/{id}")
-        public ResponseEntity getById(@PathVariable UUID id){
-            return beneficiarioService.getById(id).map(ResponseEntity::ok).orElseThrow(()-> new RuntimeException("f"));
+    public ResponseEntity getById(@PathVariable UUID id){
+        Beneficiario beneficiario = beneficiarioService.getById(id);
+        return ResponseEntity.ok(beneficiario);
     }
 
     @PostMapping
     public ResponseEntity save(@RequestBody BeneficiarioDto dto){
-        try{
-            Beneficiario saved = beneficiarioService.save(dto);
-            return ResponseEntity.status(HttpStatus.CREATED).body(saved);
-        }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fudeu");
-        }
+        Beneficiario saved = beneficiarioService.save(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable UUID id){
-        try{
-            beneficiarioService.delete(id);
-            return ResponseEntity.status(HttpStatus.OK).body("Beneficiario deletado");
-        }catch(RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Beneficiario não encontrado");
-        }
+        beneficiarioService.delete(id);
+        return ResponseEntity.ok("Beneficiário deletado.");
         
     }
 
@@ -62,7 +56,7 @@ public class BeneficiarioController {
             Beneficiario updated = beneficiarioService.update(id, dto);   
             return ResponseEntity.status(HttpStatus.OK).body(updated);
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Não deu pra atualizar");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("O ID do beneficiário específicado não existe no banco de dados");
         }
     }    
 

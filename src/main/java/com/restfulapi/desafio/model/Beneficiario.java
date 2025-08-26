@@ -26,7 +26,7 @@ public class Beneficiario {
 
     private String nome_completo;
 
-    @Column(unique = true, length = 11)
+    @Column(unique = true)
     private String cpf;
 
     private Date data_nascimento;
