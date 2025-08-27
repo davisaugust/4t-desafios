@@ -17,7 +17,6 @@ public class ErrorResponse {
     public String getMessage() { return message; }
     public List<ErrorDetail> getDetails() { return details; }
 
-    // classe interna para os detalhes
     public static class ErrorDetail {
         private String field;
         private String rule;

@@ -14,6 +14,7 @@ import com.restfulapi.desafio.dtos.BeneficiarioDto;
 import com.restfulapi.desafio.exceptions.BeneficiarioNotFound;
 import com.restfulapi.desafio.exceptions.CpfConflict;
 import com.restfulapi.desafio.exceptions.CpfInvalid;
+import com.restfulapi.desafio.exceptions.PlanoConflict;
 import com.restfulapi.desafio.exceptions.PlanoInvalid;
 import com.restfulapi.desafio.exceptions.PlanoNotFound;
 
@@ -50,8 +51,14 @@ public class BeneficiarioService {
     
         if(beneficiarioRepository.existsByCpf(dto.cpf())){
             throw new CpfConflict();
-        }else if(cpf.length() != 11 ){
+        }
+
+        if(cpf.length() != 11 ){
             throw new CpfInvalid();
+        }
+
+        if(beneficiarioRepository.existsByPlanoId(dto.plano_id())){
+            throw new PlanoConflict();
         }
 
         Plano plano = planoRepository.findById(dto.plano_id())
@@ -65,13 +72,15 @@ public class BeneficiarioService {
 
 
     public void delete(UUID id){
+        
         Beneficiario beneficiario = beneficiarioRepository.findById(id).orElseThrow(() -> new BeneficiarioNotFound());
+
         beneficiarioRepository.delete(beneficiario);
+        
     }
 
     public Beneficiario update(UUID id, BeneficiarioDto dto) {
-        Beneficiario beneficiario = beneficiarioRepository.findById(id).orElseThrow(() -> new RuntimeException("CPF repetido"));
-        
+        Beneficiario beneficiario = beneficiarioRepository.findById(id).orElseThrow(() -> new BeneficiarioNotFound());
         BeanUtils.copyProperties(dto, beneficiario, "id", "data_cadastro", "plano", "status");
         
 
@@ -83,11 +92,12 @@ public class BeneficiarioService {
             beneficiario.setData_cadastro(dto.data_cadastro());
         }
 
-        if (dto.plano_id() != null) {
-            Plano plano = planoRepository.findById(dto.plano_id())
-                    .orElseThrow(() -> new RuntimeException("Plano informado não existe"));
-            beneficiario.setPlano(plano);
+        if(beneficiarioRepository.existsByPlanoId(dto.plano_id())){
+            throw new PlanoConflict();
         }
+
+        Plano plano = planoRepository.findById(dto.plano_id())
+                .orElseThrow(() -> new PlanoNotFound());
 
         return beneficiarioRepository.save(beneficiario);
         

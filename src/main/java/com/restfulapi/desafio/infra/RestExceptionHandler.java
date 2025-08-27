@@ -1,27 +1,19 @@
 package com.restfulapi.desafio.infra;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.restfulapi.desafio.exceptions.BeneficiarioNotFound;
+import com.restfulapi.desafio.exceptions.CodigoCadastroAnsInvalid;
 import com.restfulapi.desafio.exceptions.CpfConflict;
 import com.restfulapi.desafio.exceptions.CpfInvalid;
 import com.restfulapi.desafio.exceptions.ErrorResponse;
+import com.restfulapi.desafio.exceptions.PlanoAtrelado;
+import com.restfulapi.desafio.exceptions.PlanoConflict;
 import com.restfulapi.desafio.exceptions.PlanoInvalid;
 import com.restfulapi.desafio.exceptions.PlanoNotFound;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.Collections;
 
@@ -29,7 +21,7 @@ import java.util.Collections;
 public class RestExceptionHandler {
 
     @ExceptionHandler(PlanoNotFound.class)
-    public ResponseEntity<ErrorResponse> planoNotFound(PlanoNotFound exception) {
+    public ResponseEntity planoNotFound(PlanoNotFound exception) {
         ErrorResponse error = new ErrorResponse(
                 "Not Found",
                 exception.getMessage(),
@@ -39,7 +31,7 @@ public class RestExceptionHandler {
     }
 
     @ExceptionHandler(CpfConflict.class)
-    public ResponseEntity<ErrorResponse> cpfConflict(CpfConflict exception){
+    public ResponseEntity cpfConflict(CpfConflict exception){
         ErrorResponse error = new ErrorResponse(
             "Conflict",
             exception.getMessage(),
@@ -49,17 +41,7 @@ public class RestExceptionHandler {
     }
 
     @ExceptionHandler(CpfInvalid.class)
-    public ResponseEntity<ErrorResponse> cpfInvalid(CpfInvalid exception){
-        ErrorResponse error = new ErrorResponse(
-            "Conflict",
-            exception.getMessage(),
-            Collections.singletonList(new ErrorResponse.ErrorDetail("cpf", "invalid"))
-        );
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
-    }
-
-    @ExceptionHandler(PlanoInvalid.class)
-    public ResponseEntity<ErrorResponse> PlanoInvalid(PlanoInvalid exception){
+    public ResponseEntity cpfInvalid(CpfInvalid exception){
         ErrorResponse error = new ErrorResponse(
             "Internal Server Error",
             exception.getMessage(),
@@ -68,22 +50,52 @@ public class RestExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
 
-    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<ErrorResponse> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
+    @ExceptionHandler(PlanoInvalid.class)
+    public ResponseEntity PlanoInvalid(PlanoInvalid exception){
         ErrorResponse error = new ErrorResponse(
-                "Bad Request",
-                "Parâmetro inválido: " + ex.getName() + " = " + ex.getValue(),
-                Collections.singletonList(new ErrorResponse.ErrorDetail(ex.getName(), "type_mismatch"))
+            "Internal Server Error",
+            exception.getMessage(),
+            Collections.singletonList(new ErrorResponse.ErrorDetail("plano_id", "invalid"))
         );
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleGeneric(Exception ex) {
+    @ExceptionHandler(PlanoConflict.class)
+    public ResponseEntity PlanoConflict(PlanoConflict exception){
         ErrorResponse error = new ErrorResponse(
-                "Internal Server Error",
-                ex.getMessage(),
-                Collections.singletonList(new ErrorResponse.ErrorDetail("server", "unexpected"))
+            "Conflict",
+            exception.getMessage(),
+            Collections.singletonList(new ErrorResponse.ErrorDetail("plano_id", "invalid"))
+        );
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
+    @ExceptionHandler(PlanoAtrelado.class)
+    public ResponseEntity PlanoAtrelado(PlanoAtrelado exception){
+        ErrorResponse error = new ErrorResponse(
+            "Internal Server Error",
+            exception.getMessage(),
+            Collections.singletonList(new ErrorResponse.ErrorDetail("plano_id", "invalid"))
+        );
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+    }
+
+    @ExceptionHandler(CodigoCadastroAnsInvalid.class)
+    public ResponseEntity<ErrorResponse> CodigoCadastroAnsInvalid(CodigoCadastroAnsInvalid exception){
+        ErrorResponse error = new ErrorResponse(
+            "Conflict",
+            exception.getMessage(),
+            Collections.singletonList(new ErrorResponse.ErrorDetail("codigo_registro_ans", "invalid"))
+        );
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
+    @ExceptionHandler(BeneficiarioNotFound.class)
+    public ResponseEntity BeneficiarioNotFound(BeneficiarioNotFound exception){
+        ErrorResponse error = new ErrorResponse(
+            "Internal Server Error",
+            exception.getMessage(),
+            Collections.singletonList(new ErrorResponse.ErrorDetail("codigo_registro_ans", "invalid"))
         );
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }

@@ -17,33 +17,41 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.restfulapi.desafio.model.Beneficiario;
 import com.restfulapi.desafio.services.BeneficiarioService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import com.restfulapi.desafio.dtos.BeneficiarioDto;
 
 @RestController
 @RequestMapping("/beneficiarios")
+@Tag(name = "Beneficiarios", description = "Gerenciador de beneficiários")
 public class BeneficiarioController {
     
     @Autowired
     BeneficiarioService beneficiarioService;
 
     @GetMapping
+    @Operation(summary = "Recebe todos os beneficiários.", description = "Puxa todos os beneficiários do banco de dados.") 
     public ResponseEntity getAll(){
         return ResponseEntity.ok(beneficiarioService.getAll());
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Recebe um beneficiário por id.", description = "Puxa um beneficiário do banco de dados especificando pelo ID do beneficiário.") 
     public ResponseEntity getById(@PathVariable UUID id){
         Beneficiario beneficiario = beneficiarioService.getById(id);
         return ResponseEntity.ok(beneficiario);
     }
 
     @PostMapping
+    @Operation(summary = "Cadastra um beneficiário.", description = "Cadastra um novo beneficiário que já não esteja cadastrado no banco de dados.") 
     public ResponseEntity save(@RequestBody BeneficiarioDto dto){
-        Beneficiario saved = beneficiarioService.save(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+        return ResponseEntity.status(HttpStatus.CREATED).body(beneficiarioService.save(dto));
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Deleta um beneficiário por id.", description = "Deleta um beneficiário do banco de dados. Precisa ser especificado pelo id do beneficiário." ) 
     public ResponseEntity delete(@PathVariable UUID id){
         beneficiarioService.delete(id);
         return ResponseEntity.ok("Beneficiário deletado.");
@@ -51,13 +59,10 @@ public class BeneficiarioController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Altera as informações de um beneficiário por id.", description = "Te possibilita alterar todas as características do beneficiário. Precisa ser especificiado pelo ID do beneficiário." ) 
     public ResponseEntity update(@PathVariable UUID id, @RequestBody BeneficiarioDto dto) {
-        try {
-            Beneficiario updated = beneficiarioService.update(id, dto);   
-            return ResponseEntity.status(HttpStatus.OK).body(updated);
-        }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("O ID do beneficiário específicado não existe no banco de dados");
-        }
+        Beneficiario updated = beneficiarioService.update(id, dto);   
+        return ResponseEntity.status(HttpStatus.OK).body(updated);
     }    
 
 }
