@@ -14,9 +14,10 @@ Esta API tem como objetivo gerenciar beneficiários e seus respectivos planos e 
 ---
 
 ## Stack Utilizada
-- **Java 17+**  
-- **Spring Boot 3** (Data JPA, Validation)  
+- **Java 17+** (linguagem de programação)
+- **Spring Boot 3** (framework)  
 - **PostgreSQL** (banco de dados)
+- **Flywaydb** (migrations)
 - **Maven** (gerenciamento de dependências e build)  
 - **JUnit 5 + Mockito** (testes unitários)  
 
