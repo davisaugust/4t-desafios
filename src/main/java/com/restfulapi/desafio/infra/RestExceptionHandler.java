@@ -9,6 +9,7 @@ import com.restfulapi.desafio.exceptions.BeneficiarioNotFound;
 import com.restfulapi.desafio.exceptions.CodigoCadastroAnsInvalid;
 import com.restfulapi.desafio.exceptions.CpfConflict;
 import com.restfulapi.desafio.exceptions.CpfInvalid;
+import com.restfulapi.desafio.exceptions.CpfIsntNumber;
 import com.restfulapi.desafio.exceptions.ErrorResponse;
 import com.restfulapi.desafio.exceptions.PlanoAtrelado;
 import com.restfulapi.desafio.exceptions.PlanoConflict;
@@ -92,6 +93,16 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(BeneficiarioNotFound.class)
     public ResponseEntity BeneficiarioNotFound(BeneficiarioNotFound exception){
+        ErrorResponse error = new ErrorResponse(
+            "Internal Server Error",
+            exception.getMessage(),
+            Collections.singletonList(new ErrorResponse.ErrorDetail("codigo_registro_ans", "invalid"))
+        );
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+    }
+
+    @ExceptionHandler(CpfIsntNumber.class)
+    public ResponseEntity CpfIsntNumber(CpfIsntNumber exception){
         ErrorResponse error = new ErrorResponse(
             "Internal Server Error",
             exception.getMessage(),

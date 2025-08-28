@@ -39,7 +39,6 @@ public class PlanoService {
         var plano = new Plano();
         // String codigoRegistroAns = dto.codigo_registro_ans();
 
-                
         BeanUtils.copyProperties(dto, plano);
         return planoRepository.save(plano);    
         

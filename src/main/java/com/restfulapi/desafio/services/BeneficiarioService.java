@@ -14,6 +14,7 @@ import com.restfulapi.desafio.dtos.BeneficiarioDto;
 import com.restfulapi.desafio.exceptions.BeneficiarioNotFound;
 import com.restfulapi.desafio.exceptions.CpfConflict;
 import com.restfulapi.desafio.exceptions.CpfInvalid;
+import com.restfulapi.desafio.exceptions.CpfIsntNumber;
 import com.restfulapi.desafio.exceptions.PlanoConflict;
 import com.restfulapi.desafio.exceptions.PlanoInvalid;
 import com.restfulapi.desafio.exceptions.PlanoNotFound;
@@ -57,7 +58,9 @@ public class BeneficiarioService {
             throw new CpfInvalid();
         }
 
-        
+        if(!cpf.matches("\\d{11}")){
+            throw new CpfIsntNumber();
+        }
 
         if(beneficiarioRepository.existsByPlanoId(dto.plano_id())){
             throw new PlanoConflict();
@@ -85,13 +88,7 @@ public class BeneficiarioService {
     public Beneficiario update(UUID id, BeneficiarioDto dto) {
         Beneficiario beneficiario = beneficiarioRepository.findById(id).orElseThrow(() -> new BeneficiarioNotFound());
         BeanUtils.copyProperties(dto, beneficiario, "id", "data_cadastro", "plano", "status");
-        String cpf = dto.cpf();
         
-        if(!cpf.matches("\\d{11}")){
-            throw new CpfInvalid();
-        }
-
-
         if (dto.status() != null) {
             beneficiario.setStatus(dto.status());
         }
@@ -99,12 +96,6 @@ public class BeneficiarioService {
         if (dto.data_cadastro() != null) {
             beneficiario.setData_cadastro(dto.data_cadastro());
         }
-
-        
-
-        // if(beneficiarioRepository.existsByPlanoId(dto.plano_id())){
-        //     throw new PlanoConflict();
-        // }
 
         Plano plano = planoRepository.findById(dto.plano_id())
                 .orElseThrow(() -> new PlanoNotFound());
