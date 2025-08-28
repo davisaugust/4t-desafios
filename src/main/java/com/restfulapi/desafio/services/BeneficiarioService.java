@@ -57,6 +57,8 @@ public class BeneficiarioService {
             throw new CpfInvalid();
         }
 
+        
+
         if(beneficiarioRepository.existsByPlanoId(dto.plano_id())){
             throw new PlanoConflict();
         }
@@ -79,10 +81,16 @@ public class BeneficiarioService {
         
     }
 
+    
     public Beneficiario update(UUID id, BeneficiarioDto dto) {
         Beneficiario beneficiario = beneficiarioRepository.findById(id).orElseThrow(() -> new BeneficiarioNotFound());
         BeanUtils.copyProperties(dto, beneficiario, "id", "data_cadastro", "plano", "status");
+        String cpf = dto.cpf();
         
+        if(!cpf.matches("\\d{11}")){
+            throw new CpfInvalid();
+        }
+
 
         if (dto.status() != null) {
             beneficiario.setStatus(dto.status());
@@ -92,12 +100,16 @@ public class BeneficiarioService {
             beneficiario.setData_cadastro(dto.data_cadastro());
         }
 
-        if(beneficiarioRepository.existsByPlanoId(dto.plano_id())){
-            throw new PlanoConflict();
-        }
+        
+
+        // if(beneficiarioRepository.existsByPlanoId(dto.plano_id())){
+        //     throw new PlanoConflict();
+        // }
 
         Plano plano = planoRepository.findById(dto.plano_id())
                 .orElseThrow(() -> new PlanoNotFound());
+
+        
 
         return beneficiarioRepository.save(beneficiario);
         

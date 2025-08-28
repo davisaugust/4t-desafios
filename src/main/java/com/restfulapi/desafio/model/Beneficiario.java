@@ -3,6 +3,8 @@ package com.restfulapi.desafio.model;
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.UUID;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.restfulapi.desafio.enums.Status;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,10 +12,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Pattern;
 
 
 @Entity
@@ -49,6 +51,7 @@ public class Beneficiario {
     private Plano plano;
     
     @Column(updatable = false)
+    @JsonFormat(pattern = "yyyy:MM:dd HH:mm")
     private LocalDateTime data_cadastro = LocalDateTime.now();
 
     public Beneficiario(){

@@ -25,7 +25,7 @@ import com.restfulapi.desafio.dtos.BeneficiarioDto;
 
 @RestController
 @RequestMapping("/beneficiarios")
-@Tag(name = "Beneficiarios", description = "Gerenciador de beneficiários")
+@Tag(name = "02 - Beneficiarios", description = "Gerenciador de beneficiários")
 public class BeneficiarioController {
     
     @Autowired

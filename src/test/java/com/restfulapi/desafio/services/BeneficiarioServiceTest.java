@@ -60,7 +60,6 @@ class BeneficiarioServiceTest {
         );
     }
 
-    // 1️⃣ CPF duplicado → erro 409
     @Test
     void CpfDuplicado() {
         BeneficiarioDto dto = criarDto("12345678901");
@@ -70,7 +69,6 @@ class BeneficiarioServiceTest {
         assertThrows(CpfConflict.class, () -> beneficiarioService.save(dto));
     }
 
-    // 2️⃣ CPF inválido → erro CpfInvalid
     @Test
     void CpfInvalido() {
         BeneficiarioDto dto = criarDto("123"); // CPF com menos de 11 dígitos
@@ -78,7 +76,6 @@ class BeneficiarioServiceTest {
         assertThrows(CpfInvalid.class, () -> beneficiarioService.save(dto));
     }
 
-    // 3️⃣ Plano inexistente → erro 404 (PlanoNotFound)
     @Test
     void PlanonotFound() {
         BeneficiarioDto dto = criarDto("12345678901");
@@ -89,7 +86,6 @@ class BeneficiarioServiceTest {
         assertThrows(PlanoNotFound.class, () -> beneficiarioService.save(dto));
     }
 
-    // 4️⃣ Atualização de status para INATIVO
     @Test
     void StatusInativo() {
         Beneficiario beneficiario = new Beneficiario();
@@ -105,7 +101,6 @@ class BeneficiarioServiceTest {
         assertEquals(Status.INATIVO, atualizado.getStatus());
     }
 
-    // 5️⃣ Listagem com filtros (status + plano_id)
     @Test
     void StatusePlanosList() {
         when(beneficiarioRepository.findByStatusAndPlanoId(Status.ATIVO, idPlano))

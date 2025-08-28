@@ -23,7 +23,7 @@ import com.restfulapi.desafio.dtos.PlanoDto;
 
 @RestController
 @RequestMapping("/planos")
-@Tag(name = "Planos", description = "Gerenciador de planos")
+@Tag(name = "01 - Planos", description = "Gerenciador de planos")
 public class PlanoController {
 
     @Autowired
