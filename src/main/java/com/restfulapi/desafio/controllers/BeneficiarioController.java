@@ -1,8 +1,8 @@
 package com.restfulapi.desafio.controllers;
 
+import java.util.List;
 import java.util.UUID;
 
-import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,26 +33,26 @@ public class BeneficiarioController {
 
     @GetMapping
     @Operation(summary = "Recebe todos os beneficiários.", description = "Puxa todos os beneficiários do banco de dados.") 
-    public ResponseEntity getAll(){
+    public ResponseEntity<List<Beneficiario>> getAll(){
         return ResponseEntity.ok(beneficiarioService.getAll());
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Recebe um beneficiário por id.", description = "Puxa um beneficiário do banco de dados especificando pelo ID do beneficiário.") 
-    public ResponseEntity getById(@PathVariable UUID id){
+    public ResponseEntity<Beneficiario> getById(@PathVariable UUID id){
         Beneficiario beneficiario = beneficiarioService.getById(id);
         return ResponseEntity.ok(beneficiario);
     }
 
     @PostMapping
     @Operation(summary = "Cadastra um beneficiário.", description = "Cadastra um novo beneficiário que já não esteja cadastrado no banco de dados.") 
-    public ResponseEntity save(@RequestBody BeneficiarioDto dto){
+    public ResponseEntity<Beneficiario> save(@RequestBody BeneficiarioDto dto){
         return ResponseEntity.status(HttpStatus.CREATED).body(beneficiarioService.save(dto));
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Deleta um beneficiário por id.", description = "Deleta um beneficiário do banco de dados. Precisa ser especificado pelo id do beneficiário." ) 
-    public ResponseEntity delete(@PathVariable UUID id){
+    public ResponseEntity<String> delete(@PathVariable UUID id){
         beneficiarioService.delete(id);
         return ResponseEntity.ok("Beneficiário deletado.");
         
@@ -60,7 +60,7 @@ public class BeneficiarioController {
 
     @PutMapping("/{id}")
     @Operation(summary = "Altera as informações de um beneficiário por id.", description = "Te possibilita alterar todas as características do beneficiário. Precisa ser especificiado pelo ID do beneficiário." ) 
-    public ResponseEntity update(@PathVariable UUID id, @RequestBody BeneficiarioDto dto) {
+    public ResponseEntity<Beneficiario> update(@PathVariable UUID id, @RequestBody BeneficiarioDto dto) {
         Beneficiario updated = beneficiarioService.update(id, dto);   
         return ResponseEntity.status(HttpStatus.OK).body(updated);
     }    

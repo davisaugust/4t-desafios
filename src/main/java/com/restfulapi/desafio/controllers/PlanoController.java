@@ -1,5 +1,6 @@
 package com.restfulapi.desafio.controllers;
 
+import java.util.List;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,7 +35,7 @@ public class PlanoController {
 
     @GetMapping
     @Operation(summary = "Recebe todos os planos.", description = "Puxa todos planos armazenados no banco de dados." ) 
-    public ResponseEntity getAll(){
+    public ResponseEntity<List<Plano>> getAll(){
         return ResponseEntity.ok(planoService.getAll());
     }
 
@@ -47,7 +48,7 @@ public class PlanoController {
 
     @PostMapping
     @Operation(summary = "Cria um plano.", description = "Cria um plano novo no banco de dados.") 
-    public ResponseEntity save(@RequestBody PlanoDto dto){
+    public ResponseEntity<Plano> save(@RequestBody PlanoDto dto){
         Plano planoSalvo = planoService.save(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(planoSalvo);
         
@@ -55,7 +56,7 @@ public class PlanoController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Deleta um plano por id.", description = "Deleta um plano do banco de dados especificando pelo id do plano.") 
-    public ResponseEntity delete(@PathVariable UUID id){
+    public ResponseEntity<String> delete(@PathVariable UUID id){
         planoService.delete(id);
         return ResponseEntity.status(HttpStatus.OK).body("Plano deletado");
         
@@ -63,7 +64,7 @@ public class PlanoController {
 
     @PutMapping("/{id}")
     @Operation(summary = "Altera um plano por id.", description = "Altera as características de um plano especificando pelo id do plano.") 
-    public ResponseEntity update(@PathVariable UUID id, @RequestBody PlanoDto dto) {
+    public ResponseEntity<Plano> update(@PathVariable UUID id, @RequestBody PlanoDto dto) {
         Plano updated = planoService.update(id, dto);   
         return ResponseEntity.status(HttpStatus.OK).body(updated);
         

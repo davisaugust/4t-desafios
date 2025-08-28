@@ -67,11 +67,12 @@ class BeneficiarioServiceTest {
         when(beneficiarioRepository.existsByCpf(dto.cpf())).thenReturn(true);
 
         assertThrows(CpfConflict.class, () -> beneficiarioService.save(dto));
+
     }
 
     @Test
     void CpfInvalido() {
-        BeneficiarioDto dto = criarDto("123"); // CPF com menos de 11 dígitos
+        BeneficiarioDto dto = criarDto("123");
 
         assertThrows(CpfInvalid.class, () -> beneficiarioService.save(dto));
     }
@@ -109,6 +110,42 @@ class BeneficiarioServiceTest {
         List<Beneficiario> lista = beneficiarioRepository.findByStatusAndPlanoId(Status.ATIVO, idPlano);
 
         assertFalse(lista.isEmpty());
+    }
+
+    @Test
+    void BeneficiarioValido() {
+        BeneficiarioDto dto = criarDto("12345678901");
+        Beneficiario beneficiario = new Beneficiario();
+        beneficiario.setId(UUID.randomUUID());
+
+        when(beneficiarioRepository.existsByCpf(dto.cpf())).thenReturn(false);
+        when(planoRepository.findById(dto.plano_id())).thenReturn(Optional.of(plano));
+        when(beneficiarioRepository.save(any(Beneficiario.class))).thenReturn(beneficiario);
+
+        Beneficiario salvo = beneficiarioService.save(dto);
+
+        assertNotNull(salvo.getId());
+    }
+
+    @Test
+    void BeneficiarioSporIdInexistente() {
+        UUID idInexistente = UUID.randomUUID();
+
+        when(beneficiarioRepository.findById(idInexistente)).thenReturn(Optional.empty());
+
+        assertThrows(RuntimeException.class, () -> beneficiarioService.getById(idInexistente));
+    }
+
+    @Test
+    void ExcluirBeneficiario() {
+        UUID id = UUID.randomUUID();
+        Beneficiario beneficiario = new Beneficiario();
+        beneficiario.setId(id);
+
+        when(beneficiarioRepository.findById(id)).thenReturn(Optional.of(beneficiario));
+        doNothing().when(beneficiarioRepository).deleteById(id);
+
+        assertDoesNotThrow(() -> beneficiarioService.delete(id));
     }
 }
 

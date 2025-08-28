@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.restfulapi.desafio.enums.Status;
 import com.restfulapi.desafio.model.Beneficiario;
-import com.restfulapi.desafio.model.Plano;
 
 public interface BeneficiarioRepository extends JpaRepository<Beneficiario, UUID> {
     boolean existsByCpf(String cpf);

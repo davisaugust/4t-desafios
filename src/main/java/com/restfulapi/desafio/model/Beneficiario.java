@@ -8,14 +8,11 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.restfulapi.desafio.enums.Status;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Pattern;
 
 
 @Entity
@@ -23,7 +20,6 @@ import jakarta.validation.constraints.Pattern;
 public class Beneficiario {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @org.hibernate.annotations.UuidGenerator
     private UUID id;
 

@@ -3,8 +3,6 @@ package com.restfulapi.desafio.model;
 import java.util.UUID;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
@@ -14,7 +12,6 @@ import jakarta.persistence.Table;
 public class Plano {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @org.hibernate.annotations.UuidGenerator
     private UUID id;
     private String nome;
