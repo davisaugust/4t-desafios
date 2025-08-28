@@ -24,34 +24,30 @@ Esta API tem como objetivo gerenciar beneficiários e seus respectivos planos e 
 
 ## Como rodar localmente
 
-### 1 - Pré-requisitos
+## 1 - Pré-requisitos
 - Java 17+
 - JDK 17+
 - PostgreSQL
-## Ocasionais:
+### Ocasionais:
 - Caso esteja utilizando o vscode, baixar a extensão "Extension Pack For Java".
-- Maven (caso queira subir e testar a aplicação de forma mais rápida).
+- Maven (caso queira subir e testar a aplicação de forma mais eficiente).
 
-### 2 - Configuração do banco
+## 2 - Configuração do banco
 Crie um banco no PostgreSQL e configure no `application.properties`:
 
-Propriedades para se aplicar no .properties: 
 ```
 spring.datasource.url=jdbc:postgresql://localhost:5432/"nome do banco criado"
 spring.datasource.username=nome de usuario do postgres (normalmente vem "postgres" por padrão).
 spring.datasource.password=sua_senha (senha utilizada para entrar no postgres)
 spring.jpa.hibernate.ddl-auto=update
 ```
----
-## Comandos para rodar a aplicação
+## 3 - Comandos para rodar a aplicação
 ### Com o maven (Recomendando).
 ```
 mvn spring-boot:run
 ```
-## Para rodar sem o maven:
+### Para rodar sem o maven:
 Apenas utilize o inicializador da sua IDE dentro da classe "DesafioApplication.java".
-
----
 
 ## Testes
 
